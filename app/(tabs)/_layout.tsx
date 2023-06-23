@@ -19,13 +19,13 @@ export default function TabLayout() {
           options={{
             tabBarLabel: 'Calis',
             title:'',
-            tabBarIcon: ({color, focused, size}) => <Ionicons name='ios-flower-sharp' size={focused ? size + 4 : size} color={color}/>,
+            tabBarIcon: ({color, focused, size}) => <Ionicons name='ios-flower-sharp' size={size} color={color}/>,
           }}
         />
       <Tabs.Screen  
         name="Cinema"
         options={{
-          tabBarIcon: ({color, focused, size}) => <Ionicons name='play' size={focused ? size + 4 : size} color={color}/>,
+          tabBarIcon: ({color, focused, size}) => <Ionicons name='play' size={size} color={color}/>,
           headerShown: false,
         }}
       />

@@ -7,7 +7,7 @@ const TabBar: React.FC<BottomTabBarProps> = ({
     navigation,
 }) => {
     return (
-        <View className={`flex flex-row h-16 bg-color-light relative rounded justify-around `}>
+        <View className={`flex flex-row bg-color-light relative justify-around`}>
             {state.routes.map((route, index) => {
                 const { options } = descriptors[route.key];
 
@@ -25,7 +25,7 @@ const TabBar: React.FC<BottomTabBarProps> = ({
                     Icon = options.tabBarIcon({
                         focused: isFocused,
                         color: isFocused ? "#a038c1" : "#483c15",
-                        size: 23,
+                        size: 28,
                     });
                 }
 
@@ -50,7 +50,7 @@ const TabBar: React.FC<BottomTabBarProps> = ({
                 return (
                     <View 
                     key={route.key}
-                    className={`overflow-hidden flex transition-all bg-color-light duration-75 items-center relative`}>
+                    className={`overflow-hidden flex transition-all bg-color-light duration-75 p-2 items-center relative`}>
                         <TouchableOpacity
                             accessibilityRole="button"
                             accessibilityState={isFocused ? { selected: true } : {}}
@@ -58,17 +58,10 @@ const TabBar: React.FC<BottomTabBarProps> = ({
                             testID={options.tabBarTestID}
                             onPress={onPress}
                             onLongPress={onLongPress}
-                            style={{ flex: 1 }}
-                            className=""
 
                         >
-                            <View className="w-16 aspect-square flex flex-col items-center justify-center">
+                            <View className={`aspect-square flex flex-col items-center justify-center rounded-lg p-3 ${isFocused ? 'bg-moon-light/20' : ''}`}>
                                 {Icon}
-                                {isFocused && (
-                                    <Text className="text-moon-light">
-                                        {label as string}
-                                    </Text>
-                                )}
                             </View>
                         </TouchableOpacity>
                     </View>

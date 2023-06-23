@@ -1,8 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FlatList, Text, View, TouchableHighlight } from "react-native";
+import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
 import { Cali } from "../../../components/Cali";
 import { CalisContext } from "../../../contexts/CalisContext";
 import { useFetchCalis } from "../../../hooks/useFetchCalis";
@@ -14,8 +15,30 @@ export default function Whiteboard() {
   const [refreshing, setRefresing] = useState(false);
   const { calis, setCalis } = useContext(CalisContext)!;
   const [isAtTop, setIsAtTop] = useState<boolean>(true);
+  const [disabled, setDisabled] = useState(false)
   const Router = useRouter()
 
+  const size = useSharedValue(isAtTop ? 1 : 0);
+    const animatedStyle = useAnimatedStyle(() => {
+        return {
+            transform: [{
+                scale: size.value
+            }],
+        };
+    });
+
+  useEffect(() => {
+    if(isAtTop) {
+      setDisabled(false)
+      
+      setTimeout(() => {size.value = withSpring(1)}, 200)
+    } else {
+      size.value = withTiming(0, {duration: 200}); 
+      setTimeout(() => setDisabled(true), 200)
+    }
+    
+  }, [isAtTop])
+  
 
   const handleRefresh = async () => {
     setRefresing(true)
@@ -24,6 +47,8 @@ export default function Whiteboard() {
     setCalis(newCalis)
     setRefresing(false)
   }
+
+
 
   return (
     loading 
@@ -45,13 +70,13 @@ export default function Whiteboard() {
         data={calis} 
         renderItem={({ item }) => <Cali {...item} />} 
       />
-      {isAtTop && <View className="h-14 aspect-square overflow-hidden rounded-2xl m-4 absolute right-0 bottom-0 shadow-lg shadow-black">
+      <Animated.View style={[animatedStyle]} className={`${disabled ? 'hidden' : ''} h-14 aspect-square overflow-hidden rounded-2xl m-4 absolute right-0 bottom-0 shadow-lg shadow-black`}>
         <TouchableHighlight onPress={() => Router.push('/modal')}>
             <View className="h-14 aspect-square flex items-center justify-center color rounded-2xl bg-color-light">
               <Ionicons name={"add"} size={30} color="#fff" />
             </View>
         </TouchableHighlight>
-      </View>}
+      </Animated.View>
     </View>
   );
 }

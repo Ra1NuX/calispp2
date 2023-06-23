@@ -18,7 +18,7 @@ const Profile = () => {
         return (new Date()).getFullYear() === (new Date(date)).getFullYear()
     }) || calis[0];
 
-    const moreVisitedCali = [...calis.sort((a, b) => (b.timesVisited || 0) - (a.timesVisited || 0) )][0]
+    const moreVisitedCali = [...calis].sort((a, b) => (b.timesVisited || 0) - (a.timesVisited || 0))[0]
 
     const [profileImage, setProfileImage] = useState('');
     const [loading, setLoading] = useState(true)

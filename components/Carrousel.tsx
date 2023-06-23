@@ -22,12 +22,12 @@ const iframe = (url: string) => `<iframe width="100%" height="100%" frameborder=
 
 
 const Item = ({ url, title, src, setActive }: ItemProps) => {
-    return <TouchableNativeFeedback onPress={() => setActive({url, title, src})} >
-        <View className="m-3 mx-2 w-[150px] bg-white shadow-md shadow-black rounded-xl">
-        <View className="rounded-md overflow-hidden bg-color-light flex items-center justify-center">
-            <Image source={{ uri: src, width: 150, height: 200 }} />
-        </View>
-        <Text className="font-bold text-center overflow-hidden py-2">{title}</Text>
+    return <TouchableNativeFeedback onPress={() => setActive({url, title, src})} className="bg-red-500">
+        <View className="m-3 mx-2 w-[65vw] bg-white shadow-md shadow-black rounded-xl overflow-hidden">
+            <View className="bg-color-light flex items-center justify-center">
+                <Image source={{ uri: src, method: 'cover' }} className="w-full aspect-[9/14]" />
+            </View>
+            <Text className="font-bold text-center text-xl overflow-hidden p-3">{title}</Text>
         </View>
     </TouchableNativeFeedback>
 }
@@ -47,7 +47,7 @@ const Carrousel = () => {
                 allowsFullscreenVideo
             />
         </View>
-        <View className="flex">
+        <View className="flex ">
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                 {items.map((props) => <Item key={props.title} setActive={setActive} {...props} />)}
             </ScrollView>

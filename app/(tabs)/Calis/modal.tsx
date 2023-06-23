@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useForm, Controller } from "react-hook-form";
-import { View, Text, TouchableHighlight, TextInput, Image, FlatList } from "react-native";
+import { View, Text, TouchableHighlight, TextInput } from "react-native";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from 'zod'
 import * as ImagePicker from 'expo-image-picker';
@@ -8,6 +8,7 @@ import { createCali, uploadImageFromUri } from "../../../utils";
 import { useContext, useState } from "react";
 import { CalisContext } from "../../../contexts/CalisContext";
 import { useRouter } from "expo-router";
+import Gallery from "../../../components/Gallery";
 
 type FormData = {
     text: string;
@@ -30,7 +31,7 @@ const modal = () => {
     
     const Router = useRouter()
     const {setCalis} = useContext(CalisContext)!
-    const [images, setImages] = useState<ImagePicker.ImagePickerAsset[]>()
+    const [images, setImages] = useState<ImagePicker.ImagePickerAsset[]>([])
     
     
     const handleNewCali = async (data: { text: string }) => {
@@ -64,11 +65,11 @@ const modal = () => {
         }
     }
 
-    const handlePressImage = (id: string) => {
+    const handlePressImage = (id?: string) => {
         setImages((img) => { return [...img!.filter(({assetId}) => assetId !== id )]})
     }
 
-    return <View>
+    return <View className="h-full">
         <Controller
             control={control}
             render={({ field: { ref, onBlur, onChange, value }, fieldState: { error } }) => (
@@ -104,17 +105,9 @@ const modal = () => {
                 <MaterialCommunityIcons name="paperclip" size={25} />
             </TouchableHighlight>
         </View>
-        <FlatList 
-            className="p-1 max-h-[410px]"
-            data={images}
-            numColumns={2} 
-            renderItem={({item: {uri, assetId}, index}) => 
-            <TouchableHighlight underlayColor='#fafafa55' className="p-1 w-1/2" onLongPress={() => handlePressImage(assetId!)}>
-                <View key={index} className="w-full aspect-square rounded overflow-hidden shadow-sm shadow-black"> 
-                    <Image source={{uri, method: "cover"}} className="w-full aspect-square" resizeMode={'cover'} />
-                </View> 
-            </TouchableHighlight>
-            } />
+        <View className="flex-1 pb-2">
+        { images.length !== 0 && <Gallery images={images} onLongPressImage={handlePressImage} /> }
+        </View>
     </View>
 }
 

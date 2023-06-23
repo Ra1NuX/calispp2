@@ -1,8 +1,9 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import { ReactElement, useContext, useState } from "react"
+import { debounce } from "lodash";
+import { ReactElement, useContext, useEffect, useState } from "react"
 import { TouchableNativeFeedback, View, Alert } from "react-native"
-import Animated, { useSharedValue, useAnimatedStyle, withSpring } from 'react-native-reanimated';
+import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
 import { CalisContext } from "../contexts/CalisContext";
 import { CaliProps, WithId } from "../model/Cali";
 import { deleteCali, likeCali } from "../utils";
@@ -16,9 +17,9 @@ interface OptionProps {
 }
 
 const Options = ({ className, mainClassName, icon, onClick }: OptionProps) =>
-    <View className={`h-[52px] aspect-square overflow-hidden rounded-full mx-1 my-1 ${mainClassName}`}>
+    <View className={`h-[52px] aspect-square overflow-hidden rounded-2xl m-1 bg-emerald-200 ${mainClassName}`}>
         <TouchableNativeFeedback onPress={onClick}>
-            <View className={`${className} h-[52px] aspect-square flex items-center justify-center rounded-full bg-color-light`}>
+            <View className={`${className} h-full aspect-square flex items-center justify-center bg-color-light`}>
                 {icon}
             </View>
         </TouchableNativeFeedback>
@@ -74,28 +75,37 @@ const OptionBar = ({ Cali }: { Cali: WithId<CaliProps> }) => {
             cancelable: true
         })
     }
+    const handleMenu = () => {
+        if (!open) {
+            setOpen(true)
+            setTimeout(() => {
+                width.value = withTiming(94, { duration: 200 })
+                rotation.value = withTiming(-180);
+            }, 5)
 
-    return <View className="h-16 w-full absolute bottom-3 rounded flex flex-row-reverse justify-start mb-2">
-        <Animated.View style={[animatedStyle]} className="z-10">
-            <Options mainClassName="shadow shadow-black" icon={<Ionicons name={open ? "add" : "menu"} size={30} color="#fff" />} onClick={() => {
-                setOpen(o => !o);
-                if (!open) {
-                    rotation.value = withSpring(-45);
-                    width.value = withSpring(100, { mass: 1, damping: 40 })
-                } else {
-                    rotation.value = withSpring(0);
-                    width.value = withSpring(1, { mass: 1, damping: 40 });
-                }
-            }} />
+        } else {
+            rotation.value = withTiming(0);
+            width.value = withTiming(1, { duration: 200 });
+            setTimeout(() => setOpen(false), 200)
+        }
+    }
+
+    useEffect(() => {
+
+    }, [open])
+
+    return <View className="w-full absolute bottom-0 rounded flex flex-row-reverse justify-start">
+        <Animated.View style={[animatedStyle]} className="z-10 inline-block">
+            <Options mainClassName="shadow shadow-black" icon={<Ionicons name={open ? "close" : "menu"} size={40} color="#fff" />} onClick={debounce(handleMenu, 100)} />
         </Animated.View>
-        {open &&
-            <Animated.View style={[animationOpenStyle]} className="flex items-start flex-row rounded-full overflow-hidden right-16">
-                <Options icon={<Ionicons name={like ? "heart" : "heart-outline"} size={20} color="#fff" />} onClick={handleLike} />
-                <Options icon={<Ionicons name="car-sharp" size={20} color="#fff" />} onClick={() => null} />
-                <Options icon={<Ionicons name="share-social" size={20} color="#fff" />} onClick={() => null} />
-                <Options icon={<Ionicons name="pencil" size={20} color="#fff" />} onClick={() => null} />
-                <Options icon={<Ionicons name="trash" size={20} color="#fff" />} onClick={handleDelete} />
-            </Animated.View>}
+
+        <Animated.View style={[animationOpenStyle]} className={`${!open ? 'hidden' : 'flex'} items-start flex-row rounded-full overflow-hidden right-10`}>
+            <Options icon={<Ionicons name={like ? "heart" : "heart-outline"} size={20} color="#fff" />} onClick={handleLike} />
+            <Options icon={<Ionicons name="car-sharp" size={30} color="#fff" />} onClick={() => null} />
+            <Options icon={<Ionicons name="share-social" size={30} color="#fff" />} onClick={() => null} />
+            <Options icon={<Ionicons name="pencil" size={30} color="#fff" />} onClick={() => null} />
+            <Options icon={<Ionicons name="trash" size={30} color="#fff" />} onClick={handleDelete} />
+        </Animated.View>
     </View>
 }
 
