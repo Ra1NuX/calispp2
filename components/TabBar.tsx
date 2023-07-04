@@ -1,22 +1,28 @@
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { TouchableOpacity, View, Text } from "react-native";
+import { useNavigationState } from "@react-navigation/native";
+import { useNavigation, usePathname, useRouter } from "expo-router";
+import { TouchableOpacity, View } from "react-native";
 
 const TabBar: React.FC<BottomTabBarProps> = ({
     state,
     descriptors,
     navigation,
 }) => {
+
+    
+
     return (
-        <View className={`flex flex-row bg-color-light relative justify-around`}>
+        <View className={`flex flex-row bg-color-light relative justify-around px-8`}>
             {state.routes.map((route, index) => {
                 const { options } = descriptors[route.key];
+                
 
-                const label =
-                    options.tabBarLabel !== undefined
-                        ? options.tabBarLabel
-                        : options.title !== undefined
-                            ? options.title
-                            : route.name;
+                // const label =
+                //     options.tabBarLabel !== undefined
+                //         ? options.tabBarLabel
+                //         : options.title !== undefined
+                //             ? options.title
+                //             : route.name;
 
                 const isFocused = state.index === index;
 
@@ -47,6 +53,7 @@ const TabBar: React.FC<BottomTabBarProps> = ({
                         target: route.key,
                     });
                 };
+
                 return (
                     <View 
                     key={route.key}
@@ -60,7 +67,7 @@ const TabBar: React.FC<BottomTabBarProps> = ({
                             onLongPress={onLongPress}
 
                         >
-                            <View className={`aspect-square flex flex-col items-center justify-center rounded-lg p-3 ${isFocused ? 'bg-moon-light/20' : ''}`}>
+                            <View className={`aspect-square flex flex-col items-center justify-center rounded-lg p-2 ${isFocused ? 'bg-moon-light/5' : ''}`}>
                                 {Icon}
                             </View>
                         </TouchableOpacity>

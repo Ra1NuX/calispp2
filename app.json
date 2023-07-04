@@ -22,12 +22,13 @@
       ]
     ],
     "updates": {
-      "fallbackToCacheTimeout": 60000
+      "fallbackToCacheTimeout": 60000,
+      "url": "https://u.expo.dev/d46645c9-3dcc-4766-bc9e-696471d22d63"
     },
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#F2C846"
     },
     "assetBundlePatterns": [
       "**/*"
@@ -38,11 +39,21 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      }
+        "backgroundColor": "#F2C846"
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.ra1nux.calispp2"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d46645c9-3dcc-4766-bc9e-696471d22d63"
+      }
+    },
+    "runtimeVersion": "1.0.0"
   }
 }

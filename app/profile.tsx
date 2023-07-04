@@ -91,10 +91,6 @@ const Profile = () => {
                         <Text className="text-xl font-bold mb-2">Cali más visitado:</Text>    
                         <Cali {...moreVisitedCali} />
                     </View>
-                    <View className="p-5"> 
-                        <Text className="text-xl font-bold mb-2">Cali más veces editado:</Text>
-                        <Cali date={122312} text="adsdsadsa" id={"1"} />
-                    </View>
                     <View className="p-5">
                         <Text className="text-xl font-bold mb-2">Primer cali del año {(new Date()).getFullYear()}:</Text>
                         <Cali {...firsCaliOfThisYear} />

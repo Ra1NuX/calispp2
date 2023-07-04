@@ -26,7 +26,12 @@ const Options = ({ className, mainClassName, icon, onClick }: OptionProps) =>
     </View>
 
 
-const OptionBar = ({ Cali }: { Cali: WithId<CaliProps> }) => {
+interface OptionsProps {
+    cali: WithId<CaliProps>,
+    handleEdit: () => void;
+}
+
+const OptionBar = ({ cali, handleEdit }: OptionsProps ) => {
     const [open, setOpen] = useState(false);
     const rotation = useSharedValue(0);
     const width = useSharedValue(0);
@@ -44,7 +49,7 @@ const OptionBar = ({ Cali }: { Cali: WithId<CaliProps> }) => {
         }
     })
 
-    const { isLiked, id } = Cali;
+    const { isLiked, id } = cali;
     const [like, setLike] = useState(isLiked || false);
     const { setCalis } = useContext(CalisContext)!
 
@@ -79,7 +84,7 @@ const OptionBar = ({ Cali }: { Cali: WithId<CaliProps> }) => {
         if (!open) {
             setOpen(true)
             setTimeout(() => {
-                width.value = withTiming(94, { duration: 200 })
+                width.value = withTiming(35, { duration: 200 })
                 rotation.value = withTiming(-180);
             }, 5)
 
@@ -90,20 +95,16 @@ const OptionBar = ({ Cali }: { Cali: WithId<CaliProps> }) => {
         }
     }
 
-    useEffect(() => {
-
-    }, [open])
-
     return <View className="w-full absolute bottom-0 rounded flex flex-row-reverse justify-start">
         <Animated.View style={[animatedStyle]} className="z-10 inline-block">
             <Options mainClassName="shadow shadow-black" icon={<Ionicons name={open ? "close" : "menu"} size={40} color="#fff" />} onClick={debounce(handleMenu, 100)} />
         </Animated.View>
 
-        <Animated.View style={[animationOpenStyle]} className={`${!open ? 'hidden' : 'flex'} items-start flex-row rounded-full overflow-hidden right-10`}>
-            <Options icon={<Ionicons name={like ? "heart" : "heart-outline"} size={20} color="#fff" />} onClick={handleLike} />
+        <Animated.View style={[animationOpenStyle]} className={`${!open ? 'hidden' : 'flex'} items-start flex-row rounded-full overflow-hidden`}>
+            <Options icon={<Ionicons name={like ? "heart" : "heart-outline"} size={30} color="#fff" />} onClick={handleLike} />
             <Options icon={<Ionicons name="car-sharp" size={30} color="#fff" />} onClick={() => null} />
-            <Options icon={<Ionicons name="share-social" size={30} color="#fff" />} onClick={() => null} />
-            <Options icon={<Ionicons name="pencil" size={30} color="#fff" />} onClick={() => null} />
+            {/* <Options icon={<Ionicons name="share-social" size={30} color="#fff" />} onClick={() => null} /> */}
+            {/* <Options icon={<Ionicons name="pencil" size={30} color="#fff" />} onClick={handleEdit} /> */}
             <Options icon={<Ionicons name="trash" size={30} color="#fff" />} onClick={handleDelete} />
         </Animated.View>
     </View>

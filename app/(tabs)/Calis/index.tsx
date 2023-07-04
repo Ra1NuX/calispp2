@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useRouter } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import { useContext, useEffect, useState } from "react";
 import { FlatList, Text, View, TouchableHighlight } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
@@ -17,6 +17,7 @@ export default function Whiteboard() {
   const [isAtTop, setIsAtTop] = useState<boolean>(true);
   const [disabled, setDisabled] = useState(false)
   const Router = useRouter()
+  const navigation = useNavigation();
 
   const size = useSharedValue(isAtTop ? 1 : 0);
     const animatedStyle = useAnimatedStyle(() => {
@@ -29,11 +30,16 @@ export default function Whiteboard() {
 
   useEffect(() => {
     if(isAtTop) {
-      setDisabled(false)
-      
-      setTimeout(() => {size.value = withSpring(1)}, 200)
+      setDisabled(false);
+      navigation.setOptions({ tabBarVisible: true })
+      setTimeout(() => {
+        size.value = withSpring(1)
+      }, 200)
     } else {
-      size.value = withTiming(0, {duration: 200}); 
+      size.value = withTiming(0, {
+        duration: 200
+      }); 
+      navigation.setOptions({ tabBarVisible: false })
       setTimeout(() => setDisabled(true), 200)
     }
     
