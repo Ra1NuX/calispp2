@@ -81,9 +81,9 @@ export const Cali = ({ text, date, id, isLiked = false, assets }: WithId<CaliPro
     const isImage = () => ['jpg', 'jpeg', 'tiff'].includes(getUrlExtension(assets![0]))
 
     return <View className="rounded-xl overflow-hidden shadow shadow-black">
-        <TouchableNativeFeedback onMagicTap={() => console.log('im here')} touchSoundDisabled onPress={debounce(handlePressCali, 300)}>
+        <TouchableNativeFeedback touchSoundDisabled onPress={debounce(handlePressCali, 300)}>
             <View className="bg-white p-2 flex flex-col">
-                <Text className="text-base m-1 p-2">{text}</Text>
+                <Text className="text-base m-1 p-2">{text || ''}</Text>
                 {assets && assets.length && <View className="flex items-center justify-center m-3 rounded-2xl bg-transparent overflow-hidden">
                     {
                         
@@ -91,10 +91,10 @@ export const Cali = ({ text, date, id, isLiked = false, assets }: WithId<CaliPro
                             : <Video source={{ uri: assets[0] }} isLooping shouldPlay={!play} className="w-full aspect-square" resizeMode={ResizeMode.CONTAIN} />
                     }
                 </View>}
-
+                {/* 
                 <Text className="text-gray-500 text-right text-xs m-3 mb-0">
                     <TimeAgo dateTo={new Date(date)} locale={es} />
-                </Text>
+                </Text> */}
                 <View className="flex flex-row justify-between mt-2">
                     <View className="flex flex-row gap-2">
                         <View className="rounded-xl overflow-hidden bg-white">
